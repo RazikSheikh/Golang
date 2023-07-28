@@ -17,7 +17,7 @@ func main() {
 	}))
 	app.Get("/", func(c *fiber.Ctx) error {
 
-		return c.JSON(fiber.Map{"Client": c.IPs(), "ClientIP": c.Context().RemoteIP()})
+		return c.JSON(fiber.Map{"Client": c.IPs()[0], "ClientIP": c.Context().RemoteIP()})
 	})
 
 	log.Fatal(app.Listen(":3000"))
