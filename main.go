@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"net"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -16,8 +17,15 @@ func main() {
 		AllowCredentials: true,
 	}))
 	app.Get("/", func(c *fiber.Ctx) error {
+		clientIp := c.IP()
 
-		return c.JSON(fiber.Map{"Client": c.Context().RemoteAddr()})
+		names, err := net.LookupIP(clientIp)
+
+		if err != nil {
+			return c.JSON(fiber.Map{"error": err})
+		}
+
+		return c.JSON(fiber.Map{"Client": names})
 	})
 
 	log.Fatal(app.Listen(":3000"))
